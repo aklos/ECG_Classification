@@ -4,9 +4,10 @@ import numpy as np
 from predict import predict_labels
 
 
-def main(edf_path: str):
-    data = edf_to_list(edf_path, 0, 120)
-    predict_labels([data], 500, ['ecg'])
+def main(edf_path: str, offset: int = 0, limit: int = 0):
+    data = edf_to_list(edf_path, offset, None if limit == 0 else limit)
+    foo = predict_labels([data], 500, ['ecg'])
+    print(foo)
 
 
 def edf_to_list(edf_file_path, offset, limit):
@@ -27,5 +28,9 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--input', type=str,
                         help='path to the EDF dataset', required=True)
+    parser.add_argument('--offset', type=int,
+                        help='offset in seconds')
+    parser.add_argument('--limit', type=int,
+                        help='output limit in seconds')
     args = parser.parse_args()
-    main(args.input)
+    main(args.input, args.offset, args.limit)
