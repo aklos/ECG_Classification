@@ -8,8 +8,8 @@ def main(edf_path: str, offset: int = 0, limit: int = 0):
     data = edf_to_list(edf_path, offset, None if limit == 0 else limit)
     # split signal into 10 second segments
     chunk_size = 500 * 10
-    list_chunked = [data[i:i + chunk_size]
-                    for i in range(0, len(data), chunk_size)]
+    list_chunked = np.array([data[i:i + chunk_size]
+                             for i in range(0, len(data), chunk_size)])
 
     results = predict_labels([list_chunked], 500, ['ecg'])
     print(results)
