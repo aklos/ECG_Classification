@@ -25,8 +25,8 @@ def edf_to_list(edf_file_path, offset, limit):
     data = signal.transpose()
 
     if offset or limit:
-        offset_samples = int(record.fs * offset)
-        limit_samples = offset_samples + int(record.fs * limit)
+        offset_samples = int(125 * offset)
+        limit_samples = offset_samples + int(125 * limit)
         return data[0][offset_samples:limit_samples]
 
     return np.array(data[0])
