@@ -11,7 +11,7 @@ def main(edf_path: str, offset: int = 0, limit: int = 0):
     list_chunked = np.array([data[i:i + chunk_size]
                              for i in range(0, len(data), chunk_size)])
     
-    print(len(list_chunked))
+    print(len(data), len(list_chunked))
 
     for i, x in enumerate(list_chunked):
         results = predict_labels([x], 125, [i])
