@@ -1,4 +1,5 @@
 import argparse
+import wfdb as wf
 import numpy as np
 from predict import predict_labels
 
