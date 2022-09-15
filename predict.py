@@ -31,9 +31,9 @@ def predict_labels(ecg_leads: List[np.ndarray], fs: int, ecg_names: List[str],
     probability P(AF) if utilized
     """
     # Init model
-    config = ECGCNN_CONFIG_XL
+    config = ECGAttNet_CONFIG_XL
     config["classes"] = 2 if is_binary_classifier else config["classes"]
-    network = ECGCNN(config=config)
+    network = ECGAttNet(config=config)
     # Train model if utilized
     if not use_pretrained:
         # Load weights pre-trained on the Icentia11k dataset
