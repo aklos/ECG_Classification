@@ -34,46 +34,17 @@ def predict_labels(ecg_leads: List[np.ndarray], fs: int, ecg_names: List[str],
     config = ECGAttNet_CONFIG_XL
     config["classes"] = 2 if is_binary_classifier else config["classes"]
     network = ECGAttNet(config=config)
-    # Train model if utilized
-    if not use_pretrained:
-        # Load weights pre-trained on the Icentia11k dataset
-        try:
-            state_dict = torch.load("experiments/21_05_2021__12_15_06ECGCNN_XL_icentia11k_dataset/models/best_model.pt",
-                                    map_location=device)
-        except FileNotFoundError as _:
-            print("State dict not found. Download the state dict of ECG-DualNet XL (Icentia11k). "
-                  "Link in README. Put the state dict into the relative directory "
-                  "experiments/21_05_2021__12_15_06ECGCNN_XL_icentia11k_dataset/models/")
-            exit(1904)
-        model_state_dict = network.state_dict()
-        state_dict = {key: value for key, value in state_dict.items() if model_state_dict[key].shape == value.shape}
-        model_state_dict.update(state_dict)
-        network.load_state_dict(model_state_dict)
-        # Perform training
-        network = _train(network=network, two_classes=is_binary_classifier)
-    # Load model
-    else:
-        if is_binary_classifier:
-            try:
-                state_dict = torch.load("experiments/"
-                                        "17_12_2021__03_39_19ECGCNN_XL_physio_net_dataset_challange_two_classes/"
-                                        "models/best_model.pt", map_location=device)
-            except FileNotFoundError as _:
-                print("State dict not found. Download the state dict of ECG-DualNet XL (two class, challange). "
-                      "Link in README. Put the state dict into the relative directory "
-                      "experiments/17_12_2021__03_39_19ECGCNN_XL_physio_net_dataset_challange_two_classes/models/")
-                exit(1904)
-        else:
-            try:
-                state_dict = torch.load("experiments/25_05_2021__02_02_11ECGCNN_XL_physio_net_dataset_challange/"
-                                        "models/best_model.pt", map_location=device)
-            except FileNotFoundError as _:
-                print("State dict not found. Download the state dict of ECG-DualNet XL (four class, challange). "
-                      "Link in README. Put the state dict into the relative directory "
-                      "experiments/25_05_2021__02_02_11ECGCNN_XL_physio_net_dataset_challange/models/")
-                exit(1904)
-        # Apply state dict
-        network.load_state_dict(state_dict)
+    try:
+        state_dict = torch.load("experiments/"
+                                "17_12_2021__01_08_08ECGAttNet_XL_physio_net_dataset_challange_two_classes/"
+                                "models/best_model.pt", map_location=device)
+    except FileNotFoundError as _:
+        print("State dict not found. Download the state dict of ECG-DualNet XL (two class, challange). "
+              "Link in README. Put the state dict into the relative directory "
+              "experiments/17_12_2021__01_08_08ECGAttNet_XL_physio_net_dataset_challange_two_classes/models/")
+        exit(1904)
+    # Apply state dict
+    network.load_state_dict(state_dict)
     # Init dataset for prediction
     dataset = PhysioNetDataset(ecg_leads=ecg_leads, ecg_labels=["A"] * len(ecg_leads), fs=fs,
                                augmentation_pipeline=None, two_classes=is_binary_classifier)
