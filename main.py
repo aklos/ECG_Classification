@@ -10,8 +10,8 @@ def main(edf_path: str, offset: int = 0, limit: int = 0):
     data, sample_rate = edf_to_list(
         edf_path, offset, None if limit == 0 else limit)
 
-    # split signal into 6 second segments
-    chunk_size = sample_rate * 6
+    # split signal into 10 second segments
+    chunk_size = sample_rate * 10
     list_chunked = np.array([data[i:i + chunk_size]
                              for i in range(0, len(data), chunk_size)])
 
@@ -23,7 +23,7 @@ def main(edf_path: str, offset: int = 0, limit: int = 0):
     results = predict_labels(list_chunked, sample_rate, [
                              i for i, x in enumerate(list_chunked)], device=device)
 
-    results = [x for x in results if x[1] == 'A']
+    results = [x for x in results if x[1] != 'N']
 
     with open(edf_path[:-4] + '_rhythms', 'wb') as file:
         pickle.dump(results, file)
