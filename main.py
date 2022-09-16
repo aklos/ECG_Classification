@@ -30,7 +30,7 @@ def edf_to_list(edf_file_path, offset, limit):
     if offset or limit:
         offset_samples = int(record.fs * offset)
         limit_samples = offset_samples + int(record.fs * limit)
-        return data[0][offset_samples:limit_samples]
+        return np.array(data[0][offset_samples:limit_samples]), record.fs
 
     return np.array(data[0]), record.fs
 
