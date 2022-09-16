@@ -1,6 +1,7 @@
 import argparse
 import wfdb as wf
 import numpy as np
+import pickle
 from predict import predict_labels
 
 
@@ -15,10 +16,11 @@ def main(edf_path: str, offset: int = 0, limit: int = 0):
 
     results = predict_labels(list_chunked, sample_rate, [
                              i for i, x in enumerate(list_chunked)])
+
+    with open(edf_path[:-4] + '_rhythms', 'wb') as file:
+        pickle.dump(results, file)
+
     print(results)
-    # for i, x in enumerate(list_chunked):
-    # results = predict_labels([x], sample_rate, [i])
-    # print(results)
 
 
 def edf_to_list(edf_file_path, offset, limit):
