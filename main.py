@@ -17,6 +17,8 @@ def main(edf_path: str, offset: int = 0, limit: int = 0):
     results = predict_labels(list_chunked, sample_rate, [
                              i for i, x in enumerate(list_chunked)])
 
+    results = [x for x in results if x[1] == 'A']
+
     with open(edf_path[:-4] + '_rhythms', 'wb') as file:
         pickle.dump(results, file)
 
