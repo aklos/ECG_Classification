@@ -2,6 +2,7 @@ import argparse
 import wfdb as wf
 import numpy as np
 import pickle
+import tensorflow as tf
 from predict import predict_labels
 
 
@@ -14,8 +15,13 @@ def main(edf_path: str, offset: int = 0, limit: int = 0):
     list_chunked = np.array([data[i:i + chunk_size]
                              for i in range(0, len(data), chunk_size)])
 
+    device = 'cpu'
+
+    if tf.test.gpu_device_name() == '/device:GPU:0':
+        device = 'gpu'
+
     results = predict_labels(list_chunked, sample_rate, [
-                             i for i, x in enumerate(list_chunked)])
+                             i for i, x in enumerate(list_chunked)], device=device)
 
     results = [x for x in results if x[1] == 'A']
 
