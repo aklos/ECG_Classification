@@ -17,8 +17,8 @@ def main(edf_path: str, offset: int = 0, limit: int = 0):
 
     device = 'cpu'
 
-    if tf.test.gpu_device_name() == '/device:GPU:0':
-        device = 'gpu'
+    # if tf.test.gpu_device_name() == '/device:GPU:0':
+    #     device = 'gpu'
 
     results = predict_labels(list_chunked, sample_rate, [
                              i for i, x in enumerate(list_chunked)], device=device)
